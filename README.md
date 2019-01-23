@@ -43,7 +43,7 @@ See TestSquareBoard and TestGameBoard for examples.
 
 ## Game
 
-Your task is to implement two games: [Game 2048](https://en.wikipedia.org/wiki/2048_(video_game\)) and [Game of Fifteen](https://en.wikipedia.org/wiki/15_puzzle). Use your implementation of the GameBoard interface from the previous task.
+Your task is to implement two games: [Game 2048](https://en.wikipedia.org/wiki/2048_\(video_game\)) and [Game of Fifteen](https://en.wikipedia.org/wiki/15_puzzle). Use your implementation of the GameBoard interface from the previous task.
 
 After implementing the game you can play it yourself running main function in ui/PlayGame2048 or ui/PlayGameOfFifteen.
 
