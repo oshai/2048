@@ -54,18 +54,11 @@ fun GameBoard<Int?>.addNewValue(initializer: Game2048Initializer<Int>) {
  * Return 'true' if the values were moved and 'false' otherwise.
  */
 fun GameBoard<Int?>.moveValuesInRowOrColumn(rowOrColumn: List<ICell>): Boolean {
-    println(rowOrColumn.map(::get).joinToString { it?.toString() ?: "-" })
     val movedRowOrColumn = rowOrColumn.map(::get).moveAndMergeEqual { it * 2 }.padTo(rowOrColumn.count())
-    println("-> " + movedRowOrColumn.joinToString { it?.toString() ?: "-" })
-
-    return if (movedRowOrColumn == rowOrColumn) {
-        false
-    } else {
-        rowOrColumn.zip(movedRowOrColumn).forEach { (cell, value) ->
-            this[cell] = value
-        }
-        true
+    rowOrColumn.zip(movedRowOrColumn).forEach { (cell, value) ->
+        this[cell] = value
     }
+    return movedRowOrColumn != rowOrColumn
 }
 
 /*
@@ -79,7 +72,6 @@ fun GameBoard<Int?>.moveValues(direction: Direction): Boolean =
                 moveValuesInRowOrColumn(this.getColumn(1..width, j)) || somethingHadBeenChanged
             }
             Direction.DOWN -> (1..width).fold(false) { somethingHadBeenChanged, j ->
-                println("!!!!!!!!!!!!! down")
                 moveValuesInRowOrColumn(this.getColumn(width downTo 1, j)) || somethingHadBeenChanged
             }
             Direction.LEFT -> (1..width).fold(false) { somethingHadBeenChanged, i ->
