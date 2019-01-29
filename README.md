@@ -3,7 +3,10 @@
 ## Instructions
 
 Coursera: https://www.coursera.org/learn/kotlin-for-java-developers/supplement/6HrU1/setting-up-programming-assignments  
-Jetbrains: https://www.jetbrains.com/help/education/coursera-programming-assignments.html  
+
+You solve the assignments using JetBrains EduTools plugin for IntelliJ IDEA or Android Studio. Read the tutorial (below) on how to install the plugin, start the assignment and submit your solution to Coursera.
+
+Jetbrains tutorial: https://www.jetbrains.com/help/education/coursera-programming-assignments.html  
 Edu-tools: https://plugins.jetbrains.com/plugin/10081-edutools
 
 ## Board
