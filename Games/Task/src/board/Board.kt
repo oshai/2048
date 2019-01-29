@@ -1,8 +1,11 @@
 package board
 
-interface Cell {
+interface ICell {
     val i: Int
     val j: Int
+
+    operator fun component1(): Int
+    operator fun component2(): Int
 }
 
 enum class Direction {
@@ -19,24 +22,24 @@ enum class Direction {
 interface SquareBoard {
     val width: Int
 
-    fun getCellOrNull(i: Int, j: Int): Cell?
-    fun getCell(i: Int, j: Int): Cell
+    fun getCellOrNull(i: Int, j: Int): ICell?
+    fun getCell(i: Int, j: Int): ICell
 
-    fun getAllCells(): Collection<Cell>
+    fun getAllCells(): Collection<ICell>
 
-    fun getRow(i: Int, jRange: IntProgression): List<Cell>
-    fun getColumn(iRange: IntProgression, j: Int): List<Cell>
+    fun getRow(i: Int, jRange: IntProgression): List<ICell>
+    fun getColumn(iRange: IntProgression, j: Int): List<ICell>
 
-    fun Cell.getNeighbour(direction: Direction): Cell?
+    fun ICell.getNeighbour(direction: Direction): ICell?
 }
 
 interface GameBoard<T> : SquareBoard {
 
-    operator fun get(cell: Cell): T?
-    operator fun set(cell: Cell, value: T?)
+    operator fun get(cell: ICell): T?
+    operator fun set(cell: ICell, value: T?)
 
-    fun filter(predicate: (T?) -> Boolean): Collection<Cell>
-    fun find(predicate: (T?) -> Boolean): Cell?
+    fun filter(predicate: (T?) -> Boolean): Collection<ICell>
+    fun find(predicate: (T?) -> Boolean): ICell?
     fun any(predicate: (T?) -> Boolean): Boolean
     fun all(predicate: (T?) -> Boolean): Boolean
 }

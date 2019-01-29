@@ -1,6 +1,6 @@
 package games.game2048
 
-import board.Cell
+import board.ICell
 import board.Direction
 import board.GameBoard
 import board.createGameBoard
@@ -42,7 +42,9 @@ class Game2048(private val initializer: Game2048Initializer<Int>) : Game {
  * Add a new value produced by 'initializer' to a specified cell in a board.
  */
 fun GameBoard<Int?>.addNewValue(initializer: Game2048Initializer<Int>) {
-    TODO()
+    initializer.nextValue(this)?.let { (nextCell, nextValue) ->
+        this[nextCell] = nextValue
+    }
 }
 
 /*
@@ -51,8 +53,19 @@ fun GameBoard<Int?>.addNewValue(initializer: Game2048Initializer<Int>) {
  * The values should be moved to the beginning of the row (or column), in the same manner as in the function 'moveAndMergeEqual'.
  * Return 'true' if the values were moved and 'false' otherwise.
  */
-fun GameBoard<Int?>.moveValuesInRowOrColumn(rowOrColumn: List<Cell>): Boolean {
-    TODO()
+fun GameBoard<Int?>.moveValuesInRowOrColumn(rowOrColumn: List<ICell>): Boolean {
+    println(rowOrColumn.map(::get).joinToString { it?.toString() ?: "-" })
+    val movedRowOrColumn = rowOrColumn.map(::get).moveAndMergeEqual { it * 2 }.padTo(rowOrColumn.count())
+    println("-> " + movedRowOrColumn.joinToString { it?.toString() ?: "-" })
+
+    return if (movedRowOrColumn == rowOrColumn) {
+        false
+    } else {
+        rowOrColumn.zip(movedRowOrColumn).forEach { (cell, value) ->
+            this[cell] = value
+        }
+        true
+    }
 }
 
 /*
@@ -60,6 +73,22 @@ fun GameBoard<Int?>.moveValuesInRowOrColumn(rowOrColumn: List<Cell>): Boolean {
  * Use the 'moveValuesInRowOrColumn' function above.
  * Return 'true' if the values were moved and 'false' otherwise.
  */
-fun GameBoard<Int?>.moveValues(direction: Direction): Boolean {
-    TODO()
-}
+fun GameBoard<Int?>.moveValues(direction: Direction): Boolean =
+        when (direction) {
+            Direction.UP -> (1..width).fold(false) { somethingHadBeenChanged, j ->
+                moveValuesInRowOrColumn(this.getColumn(1..width, j)) || somethingHadBeenChanged
+            }
+            Direction.DOWN -> (1..width).fold(false) { somethingHadBeenChanged, j ->
+                println("!!!!!!!!!!!!! down")
+                moveValuesInRowOrColumn(this.getColumn(width downTo 1, j)) || somethingHadBeenChanged
+            }
+            Direction.LEFT -> (1..width).fold(false) { somethingHadBeenChanged, i ->
+                moveValuesInRowOrColumn(this.getRow(i, 1..width)) || somethingHadBeenChanged
+            }
+            Direction.RIGHT -> (1..width).fold(false) { somethingHadBeenChanged, i ->
+                moveValuesInRowOrColumn(this.getRow(i, width downTo 1)) || somethingHadBeenChanged
+            }
+        }
+
+fun <E> List<E>.padTo(count: Int) =
+        List(count, ::getOrNull)

@@ -1,6 +1,6 @@
 package games.board
 
-import board.Cell
+import board.ICell
 import board.createSquareBoard
 import board.Direction.*
 import org.junit.Assert
@@ -8,14 +8,14 @@ import org.junit.Test
 
 class TestSquareBoard {
 
-    private fun Cell?.asString() = if (this != null) "($i, $j)" else ""
+    private fun ICell?.asString() = if (this != null) "($i, $j)" else ""
 
-    private fun Collection<Cell>.asString() = joinToString(prefix = "[", postfix = "]") { it.asString() }
+    private fun Collection<ICell>.asString() = joinToString(prefix = "[", postfix = "]") { it.asString() }
 
     @Test
     fun testAllCells() {
         val board = createSquareBoard(2)
-        val cells = board.getAllCells().sortedWith(compareBy<Cell> { it.i }.thenBy { it.j })
+        val cells = board.getAllCells().sortedWith(compareBy<ICell> { it.i }.thenBy { it.j })
         Assert.assertEquals("[(1, 1), (1, 2), (2, 1), (2, 2)]", cells.asString())
     }
 

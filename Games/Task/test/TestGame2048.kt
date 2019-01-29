@@ -1,6 +1,6 @@
 package games.game2048
 
-import board.Cell
+import board.ICell
 import board.Direction
 import board.Direction.*
 import board.GameBoard
@@ -18,7 +18,7 @@ class TestGame2048 {
 
     class TestGame2048Initializer(moves: List<Move>) : Game2048Initializer<Int> {
         val iterator = moves.iterator()
-        override fun nextValue(board: GameBoard<Int?>): Pair<Cell, Int> {
+        override fun nextValue(board: GameBoard<Int?>): Pair<ICell, Int> {
             val move = iterator.next()
             return board.getCell(move.position.first, move.position.second) to move.value
         }
@@ -56,7 +56,7 @@ class TestGame2048 {
             val initialBoard: String
     ) {
         val cell: String
-            get() = "Cell(${position.first}, ${position.second})"
+            get() = "ICell(${position.first}, ${position.second})"
 
         val board: String = initialBoard.trimMargin()
     }

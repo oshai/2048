@@ -1,14 +1,14 @@
 package games.game2048
 
-import board.Cell
+import board.ICell
 import board.GameBoard
 import java.util.*
 
 interface Game2048Initializer<T> {
-    fun nextValue(board: GameBoard<T?>): Pair<Cell, T>?
+    fun nextValue(board: GameBoard<T?>): Pair<ICell, T>?
 }
 
-object RandomGame2048Initializer: Game2048Initializer<Int> {
+object RandomGame2048Initializer : Game2048Initializer<Int> {
     private val random = Random()
     private fun generateRandomStartValue(): Int =
             if (random.nextInt(10) == 9) 4 else 2
@@ -20,7 +20,12 @@ object RandomGame2048Initializer: Game2048Initializer<Int> {
      * Use the 'generateRandomStartValue' function above.
      * If the board is full return null.
      */
-    override fun nextValue(board: GameBoard<Int?>): Pair<Cell, Int>? {
-        TODO()
-    }
+    override fun nextValue(board: GameBoard<Int?>): Pair<ICell, Int>? =
+            board
+                    .find { it == null }
+                    ?.let { freeCell ->
+                        val randomStartValue = generateRandomStartValue()
+                        board[freeCell] = randomStartValue
+                        freeCell to randomStartValue
+                    }
 }

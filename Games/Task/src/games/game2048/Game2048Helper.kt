@@ -13,6 +13,32 @@ package games.game2048
  *   a, a, null, a -> aa, a
  *   a, null, a, a -> aa, a
 */
-fun <T : Any> List<T?>.moveAndMergeEqual(double: (T) -> T): List<T> =
-        TODO()
 
+enum class FoldingState {
+    DidNotMergeYet,
+    MappedTheFirstValue,
+    DeletedTheSecondValue
+}
+
+fun <T : Any> List<T?>.moveAndMergeEqual(double: (T) -> T): List<T> {
+    val notNullList = this.filterNotNull()
+    val mergedList =
+            notNullList.drop(1).mapIndexedNotNull { index, value ->
+                value.takeIf { notNullList[index] == value }
+            }.firstOrNull()
+                    ?.let { firstDuplicatedValue ->
+                        notNullList.fold(FoldingState.DidNotMergeYet to emptyList<T>()) { (foldingState, mappedList), currentValue ->
+                            if (currentValue == firstDuplicatedValue)
+                                when (foldingState) {
+                                    FoldingState.DidNotMergeYet ->
+                                        FoldingState.MappedTheFirstValue to (mappedList + double(currentValue))
+                                    FoldingState.MappedTheFirstValue ->
+                                        FoldingState.DeletedTheSecondValue to mappedList
+                                    FoldingState.DeletedTheSecondValue ->
+                                        foldingState to (mappedList + currentValue)
+                                }
+                            else foldingState to (mappedList + currentValue)
+                        }.second
+                    }
+    return mergedList?.moveAndMergeEqual(double) ?: notNullList
+}
